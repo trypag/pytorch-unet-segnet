@@ -1,3 +1,10 @@
 - transforms
-- elastic deformation (unet)
 - dice loss
+- attention models
+- rnn to replace crf
+- pspnet
+- deeplabv3
+- deep residual network
+- refinenet
+- pascalvoc
+- perturbation en intensité
