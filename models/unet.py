@@ -16,12 +16,10 @@ class _Encoder(nn.Module):
     def __init__(self, n_in_feat, n_out_feat, drop_rate=0):
         super(_Encoder, self).__init__()
 
-        layers = [
-                nn.Conv2d(n_in_feat, n_out_feat, 3),
-                nn.ReLU(inplace=True),
-                nn.Conv2d(n_out_feat, n_out_feat, 3),
-                nn.ReLU(inplace=True)
-            ]
+        layers = [nn.Conv2d(n_in_feat, n_out_feat, 3),
+                  nn.ReLU(inplace=True),
+                  nn.Conv2d(n_out_feat, n_out_feat, 3),
+                  nn.ReLU(inplace=True)]
 
         if drop_rate > 0:
             layers += [nn.Dropout(drop_rate)]
@@ -55,9 +53,9 @@ class _Decoder(nn.Module):
 
         # eval offset to allow cropping of the encoder's features
         crop_size = feat_decoder.size(-1)
-        offset = (feat_encoder.size(-1) - crop_size)//2
-        crop = feat_encoder[:, :, offset:offset+crop_size,
-                            offset:offset+crop_size]
+        offset = (feat_encoder.size(-1) - crop_size) // 2
+        crop = feat_encoder[:, :, offset:offset + crop_size,
+                            offset:offset + crop_size]
         return self.encoder(torch.cat([feat_decoder, crop], 1))
 
 

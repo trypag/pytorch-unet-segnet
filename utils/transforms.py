@@ -27,7 +27,7 @@ def center_rotate(image, angle, scale=1., interp=cv2.INTER_LANCZOS4):
     w = image.shape[2]
 
     # ask OpenCV for the rotation matrix
-    rot_mat = cv2.getRotationMatrix2D((h//2, w//2), angle, scale)
+    rot_mat = cv2.getRotationMatrix2D((h // 2, w // 2), angle, scale)
     # apply the affine transform on the image
     return cv2.warpAffine(image.swapaxes(0, 2), rot_mat, (h, w),
                           flags=interp).swapaxes(0, 2)
@@ -69,8 +69,8 @@ def elastic_deformation_2d(image, alpha, sigma, order=1, mode='constant',
     x, z, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]),
                           np.arange(shape[2]))
 
-    indices = (z.reshape(-1, 1), np.reshape(x+dx, (-1, 1)),
-               np.reshape(y+dy, (-1, 1)))
+    indices = (z.reshape(-1, 1), np.reshape(x + dx, (-1, 1)),
+               np.reshape(y + dy, (-1, 1)))
 
     return map_coordinates(image, indices, order=order,
                            mode=mode).reshape(shape)
@@ -110,8 +110,8 @@ def elastic_deformation_3d(image, alpha, sigma, order=1, mode='constant',
     x, z, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]),
                           np.arange(shape[2]))
 
-    indices = ((z+dz).reshape(-1, 1), np.reshape(x+dx, (-1, 1)),
-               np.reshape(y+dy, (-1, 1)))
+    indices = ((z + dz).reshape(-1, 1), np.reshape(x + dx, (-1, 1)),
+               np.reshape(y + dy, (-1, 1)))
 
     return map_coordinates(image, indices, order=order,
                            mode=mode).reshape(shape)
