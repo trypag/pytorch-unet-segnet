@@ -17,8 +17,8 @@ class SegNet(nn.Module):
                  filter_config=(64, 128, 256, 512, 512)):
         super(SegNet, self).__init__()
 
-        self.encoders = []
-        self.decoders = []
+        self.encoders = nn.ModuleList()
+        self.decoders = nn.ModuleList()
         # setup number of conv-bn-relu blocks per module and number of filters
         encoder_n_layers = (2, 2, 3, 3, 3)
         encoder_filter_config = (n_init_features,) + filter_config
