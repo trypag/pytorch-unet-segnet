@@ -73,15 +73,16 @@ class _Encoder(nn.Module):
                   nn.BatchNorm2d(n_out_feat),
                   nn.ReLU(inplace=True)]
 
-        if n_blocks == 3:
-            layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
-                       nn.BatchNorm2d(n_out_feat),
-                       nn.ReLU(inplace=True)]
-
-        layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
-                   nn.BatchNorm2d(n_out_feat),
-                   nn.ReLU(inplace=True),
-                   nn.Dropout(drop_rate)]
+        if n_blocks > 1:
+            if n_blocks == 3:
+                layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
+                           nn.BatchNorm2d(n_out_feat),
+                           nn.ReLU(inplace=True),
+                           nn.Dropout(drop_rate)]
+            else:
+                layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
+                           nn.BatchNorm2d(n_out_feat),
+                           nn.ReLU(inplace=True)]
 
         self.features = nn.Sequential(*layers)
 
@@ -109,14 +110,14 @@ class _Decoder(nn.Module):
 
         if n_blocks > 1:
             if n_blocks == 3:
+                layers += [nn.Conv2d(n_in_feat, n_out_feat, 3, 1, 1),
+                           nn.BatchNorm2d(n_out_feat),
+                           nn.ReLU(inplace=True),
+                           nn.Dropout(drop_rate)]
+            else:
                 layers += [nn.Conv2d(n_in_feat, n_in_feat, 3, 1, 1),
                            nn.BatchNorm2d(n_in_feat),
                            nn.ReLU(inplace=True)]
-
-            layers += [nn.Conv2d(n_in_feat, n_out_feat, 3, 1, 1),
-                       nn.BatchNorm2d(n_out_feat),
-                       nn.ReLU(inplace=True),
-                       nn.Dropout(drop_rate)]
 
         self.features = nn.Sequential(*layers)
 
