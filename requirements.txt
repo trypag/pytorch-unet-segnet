@@ -1,4 +1,0 @@
-numpy
-torch
-tqdm
-opencv
