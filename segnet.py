@@ -6,7 +6,6 @@ class SegNet(nn.Module):
     """SegNet: A Deep Convolutional Encoder-Decoder Architecture for
     Image Segmentation. https://arxiv.org/abs/1511.00561
     See https://github.com/alexgkendall/SegNet-Tutorial for original models.
-
     Args:
         num_classes (int): number of classes to segment
         n_init_features (int): number of input features in the fist convolution
@@ -60,7 +59,6 @@ class SegNet(nn.Module):
 class _Encoder(nn.Module):
     def __init__(self, n_in_feat, n_out_feat, n_blocks=2, drop_rate=0.5):
         """Encoder layer follows VGG rules + keeps pooling indices
-
         Args:
             n_in_feat (int): number of input features
             n_out_feat (int): number of output features
@@ -74,15 +72,11 @@ class _Encoder(nn.Module):
                   nn.ReLU(inplace=True)]
 
         if n_blocks > 1:
+            layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
+                       nn.BatchNorm2d(n_out_feat),
+                       nn.ReLU(inplace=True)]
             if n_blocks == 3:
-                layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
-                           nn.BatchNorm2d(n_out_feat),
-                           nn.ReLU(inplace=True),
-                           nn.Dropout(drop_rate)]
-            else:
-                layers += [nn.Conv2d(n_out_feat, n_out_feat, 3, 1, 1),
-                           nn.BatchNorm2d(n_out_feat),
-                           nn.ReLU(inplace=True)]
+                layers += [nn.Dropout(drop_rate)]
 
         self.features = nn.Sequential(*layers)
 
@@ -94,7 +88,6 @@ class _Encoder(nn.Module):
 class _Decoder(nn.Module):
     """Decoder layer decodes the features by unpooling with respect to
     the pooling indices of the corresponding decoder part.
-
     Args:
         n_in_feat (int): number of input features
         n_out_feat (int): number of output features
@@ -109,12 +102,12 @@ class _Decoder(nn.Module):
                   nn.ReLU(inplace=True)]
 
         if n_blocks > 1:
-                layers += [nn.Conv2d(n_in_feat, n_out_feat, 3, 1, 1),
-                           nn.BatchNorm2d(n_out_feat),
-                           nn.ReLU(inplace=True)]
-                if n_blocks == 3:
-                    layers += [nn.Dropout(drop_rate)]
-    
+            layers += [nn.Conv2d(n_in_feat, n_out_feat, 3, 1, 1),
+                       nn.BatchNorm2d(n_out_feat),
+                       nn.ReLU(inplace=True)]
+            if n_blocks == 3:
+                layers += [nn.Dropout(drop_rate)]
+
         self.features = nn.Sequential(*layers)
 
     def forward(self, x, indices, size):
