@@ -109,16 +109,12 @@ class _Decoder(nn.Module):
                   nn.ReLU(inplace=True)]
 
         if n_blocks > 1:
-            if n_blocks == 3:
                 layers += [nn.Conv2d(n_in_feat, n_out_feat, 3, 1, 1),
                            nn.BatchNorm2d(n_out_feat),
-                           nn.ReLU(inplace=True),
-                           nn.Dropout(drop_rate)]
-            else:
-                layers += [nn.Conv2d(n_in_feat, n_in_feat, 3, 1, 1),
-                           nn.BatchNorm2d(n_in_feat),
                            nn.ReLU(inplace=True)]
-
+                if n_blocks == 3:
+                    layers += [nn.Dropout(drop_rate)]
+    
         self.features = nn.Sequential(*layers)
 
     def forward(self, x, indices, size):
